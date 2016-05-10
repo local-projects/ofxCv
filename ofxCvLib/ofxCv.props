@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(OF_ROOT)\addons\ofxCv\libs\CLD\include;$(OF_ROOT)\addons\ofxCv\libs\CLD\include\CLD;$(OF_ROOT)\addons\ofxCv\libs\ofxCv\include;$(OF_ROOT)\addons\ofxCv\libs\ofxCv\include\ofxCv;$(OF_ROOT)\addons\ofxCv\src;$(OF_ROOT)\addons\ofxOpenCv\src;$(OF_ROOT)\addons\ofxOpenCv\libs\ippicv\include;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\calib3d;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\Core;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\Core\cuda;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\Core\cuda\detail;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\Core\hal;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\features2d;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\flann;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\highgui;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\imgcodecs;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc\detail;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\ml;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\objdetect;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\photo;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\shape;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\stitching;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\stitching\detail;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\superres;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\video;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\videoio;$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\include\opencv2\videostab;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(OF_ROOT)\addons\ofxOpenCv\libs\ippicv\lib\vs\$(Platform);$(OF_ROOT)\addons\ofxOpenCv\libs\opencv\lib\vs\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ippicvmt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <Link>
+      <AdditionalDependencies>libwebpd.lib;opencv_calib3d310d.lib;opencv_core310d.lib;opencv_features2d310d.lib;opencv_flann310d.lib;opencv_highgui310d.lib;opencv_imgcodecs310d.lib;opencv_imgproc310d.lib;opencv_ml310d.lib;opencv_objdetect310d.lib;opencv_photo310d.lib;opencv_shape310d.lib;opencv_stitching310d.lib;opencv_superres310d.lib;opencv_video310d.lib;opencv_videoio310d.lib;opencv_videostab310d.lib;zlibd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <Link>
+      <AdditionalDependencies>libwebp.lib;opencv_calib3d310.lib;opencv_core310.lib;opencv_features2d310.lib;opencv_flann310.lib;opencv_highgui310.lib;opencv_imgcodecs310.lib;opencv_imgproc310.lib;opencv_ml310.lib;opencv_objdetect310.lib;opencv_photo310.lib;opencv_shape310.lib;opencv_stitching310.lib;opencv_superres310.lib;opencv_video310.lib;opencv_videoio310.lib;opencv_videostab310.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>

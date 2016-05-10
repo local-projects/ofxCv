@@ -31,6 +31,8 @@ project.xcworkspace
 *.sdf
 *.suo
 *.ipch
+x64
+Win32
 
 .svn/
 obj/
