@@ -18,7 +18,7 @@ namespace ofxCv {
 	};
 	
 	const string& mostRepresentative(const vector<string>& strs) {
-		int bestScore;
+		int bestScore = INT_MAX;
 		int besti;
 		int n = strs.size();
 		for(int i = 0; i < n; i++) {
