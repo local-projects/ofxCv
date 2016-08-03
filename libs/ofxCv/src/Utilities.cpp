@@ -28,7 +28,7 @@ namespace ofxCv {
 	}
 	
 	Mat toCv(ofMesh& mesh) {
-		vector<ofVec3f>& vertices = mesh.getVertices();
+		auto & vertices = mesh.getVertices();
 		return Mat(1, vertices.size(), CV_32FC3, &vertices[0]);
 	}
 	
