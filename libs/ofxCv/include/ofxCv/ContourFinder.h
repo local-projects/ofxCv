@@ -43,7 +43,7 @@ namespace ofxCv {
 		void findContours(T& img) {
 			findContours(toCv(img));
 		}
-		void findContours(cv::Mat img);
+		void findContours(cv::Mat img, int numErode = 0, int numDilate = 0, bool erodeFirst = true);
 		const std::vector<std::vector<cv::Point> >& getContours() const;
 		const std::vector<ofPolyline>& getPolylines() const;
 		const std::vector<cv::Rect>& getBoundingRects() const;
