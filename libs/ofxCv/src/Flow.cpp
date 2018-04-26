@@ -188,7 +188,20 @@ namespace ofxCv {
 		}
 		return ret;
 	}
-    
+
+	vector<glm::vec2> FlowPyrLK::getPrevious(){
+		vector<glm::vec2> ret;
+		if(status.size()){
+			for(std::size_t i = 0; i < prevPts.size(); i++) {
+				if(status[i]){
+					ret.push_back(toOf(prevPts[i]));
+				}
+			}
+		}
+		return ret;
+	}
+
+
 	vector<glm::vec2> FlowPyrLK::getMotion(){
 		vector<glm::vec2> ret(prevPts.size());
 		for(std::size_t i = 0; i < prevPts.size(); i++) {
@@ -202,11 +215,21 @@ namespace ofxCv {
 	void FlowPyrLK::drawFlow(ofRectangle rect) {
 		glm::vec2 offset(rect.x,rect.y);
 		glm::vec2 scale(rect.width/getWidth(),rect.height/getHeight());
+		ofMesh m;
+		m.setMode(OF_PRIMITIVE_LINES);
+
 		for(std::size_t i = 0; i < prevPts.size(); i++) {
 			if(status[i]){
-				ofDrawLine(toOf(prevPts[i])*scale+offset, toOf(nextPts[i])*scale+offset);
+				//ofDrawLine(toOf(prevPts[i])*scale+offset, toOf(nextPts[i])*scale+offset);
+				auto pt1 = toOf(prevPts[i]) * scale + offset;
+				auto pt2 = toOf(nextPts[i]) * scale + offset;
+				m.addVertex(glm::vec3(pt1.x, pt1.y, 0));
+				m.addVertex(glm::vec3(pt2.x, pt2.y, 0));
+				m.addColor(ofColor::red);
+				m.addColor(ofColor(255,0,0,0));
 			}
 		}
+		m.draw();
 	}
     
     void FlowPyrLK::resetFlow(){

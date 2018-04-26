@@ -75,6 +75,7 @@ namespace ofxCv {
 		//returns tracking features for this image
 		std::vector<glm::vec3> getFeatures();
 		std::vector<glm::vec2> getCurrent();
+		std::vector<glm::vec2> getPrevious();
 		std::vector<glm::vec2> getMotion();
 		
 		// recalculates features to track
