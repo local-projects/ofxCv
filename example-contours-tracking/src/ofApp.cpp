@@ -7,14 +7,13 @@ void ofApp::setup() {
 	ofSetVerticalSync(true);
 	ofBackground(0);
 	
-	movie.load("shutterstock_4758647.mov");
-	ofSetWindowShape(movie.getWidth(), movie.getHeight());
+	movie.load("video.mov");
 	movie.play();
 	
 	contourFinder.setMinAreaRadius(1);
 	contourFinder.setMaxAreaRadius(100);
-	contourFinder.setThreshold(128);
-	// wait for half a frame before forgetting something
+	contourFinder.setThreshold(15);
+	// wait for half a second before forgetting something
 	contourFinder.getTracker().setPersistence(15);
 	// an object can move up to 32 pixels per frame
 	contourFinder.getTracker().setMaximumDistance(32);

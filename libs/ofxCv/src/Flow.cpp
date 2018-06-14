@@ -1,5 +1,6 @@
 #include "ofxCv/Flow.h"
 #include "ofGraphics.h"
+#include "ofMesh.h"
 
 namespace ofxCv {
 	
@@ -145,7 +146,7 @@ namespace ofxCv {
 		}
 	}
 	
-	void FlowPyrLK::calcFeaturesToTrack(vector<cv::Point2f> & features, Mat next){
+	void FlowPyrLK::calcFeaturesToTrack(std::vector<cv::Point2f> & features, Mat next){
 		goodFeaturesToTrack(
                             next,
                             features,
@@ -159,7 +160,7 @@ namespace ofxCv {
 		calcFeaturesNextFrame=true;
 	}
 	
-	void FlowPyrLK::setFeaturesToTrack(const vector<glm::vec2> & features){
+	void FlowPyrLK::setFeaturesToTrack(const std::vector<glm::vec2> & features){
 		nextPts.resize(features.size());
 		for(std::size_t i=0;i<features.size();i++){
 			nextPts[i]=toCv(features[i]);
@@ -167,18 +168,18 @@ namespace ofxCv {
 		calcFeaturesNextFrame = false;
 	}
 	
-	void FlowPyrLK::setFeaturesToTrack(const vector<cv::Point2f> & features){
+	void FlowPyrLK::setFeaturesToTrack(const std::vector<cv::Point2f> & features){
 		nextPts = features;
 		calcFeaturesNextFrame = false;
 	}
 	
-    vector<glm::vec3> FlowPyrLK::getFeatures(){
+    std::vector<glm::vec3> FlowPyrLK::getFeatures(){
 		ofPolyline poly = toOf(prevPts);
 		return poly.getVertices();
 	}
 	
-	vector<glm::vec2> FlowPyrLK::getCurrent(){
-		vector<glm::vec2> ret;
+	std::vector<glm::vec2> FlowPyrLK::getCurrent(){
+		std::vector<glm::vec2> ret;
 		if(status.size()){
 			for(std::size_t i = 0; i < nextPts.size(); i++) {
 				if(status[i]){
@@ -189,8 +190,8 @@ namespace ofxCv {
 		return ret;
 	}
 
-	vector<glm::vec2> FlowPyrLK::getPrevious(){
-		vector<glm::vec2> ret;
+	std::vector<glm::vec2> FlowPyrLK::getPrevious(){
+		std::vector<glm::vec2> ret;
 		if(status.size()){
 			for(std::size_t i = 0; i < prevPts.size(); i++) {
 				if(status[i]){
@@ -202,8 +203,8 @@ namespace ofxCv {
 	}
 
 
-	vector<glm::vec2> FlowPyrLK::getMotion(){
-		vector<glm::vec2> ret(prevPts.size());
+	std::vector<glm::vec2> FlowPyrLK::getMotion(){
+		std::vector<glm::vec2> ret(prevPts.size());
 		for(std::size_t i = 0; i < prevPts.size(); i++) {
 			if(status[i]){
 				ret.push_back(toOf(nextPts[i])-toOf(prevPts[i]));
