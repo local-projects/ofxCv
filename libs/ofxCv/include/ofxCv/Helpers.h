@@ -194,6 +194,33 @@ namespace ofxCv {
 		for(int i=0;i<n;i++){int j=q[i];if(!p[j+ib1]&&!p[j+ia1]&&!p[j+ia2]&&p[j+ic2]&&p[j+ib3]){p[j]=0;}}
 	}
 	
+
+	//same as above, different implementation from
+	//http://felix.abecassis.me/2011/09/opencv-morphological-skeleton/
+	template <class T>
+	void thin2(T& img) {
+
+		cv::Mat mat = toCv(img);
+		cv::Mat skel(mat.size(), CV_8UC1, cv::Scalar(0));
+		cv::Mat temp;
+		cv::Mat eroded;
+
+		cv::Mat element = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(3, 3));
+		bool done;
+		int c = 0;
+		do{
+			cv::erode(mat, eroded, element);
+			cv::dilate(eroded, temp, element); // temp = open(img)
+			cv::subtract(mat, temp, temp);
+			cv::bitwise_or(skel, temp, skel);
+			eroded.copyTo(mat);
+			done = (cv::countNonZero(mat) == 0);
+			c++;
+		} while (!done);
+		skel.copyTo(mat);
+		return;
+	}
+
 	// given a vector of lines, this function will find the average angle
 	float weightedAverageAngle(const std::vector<cv::Vec4i>& lines);
 	
