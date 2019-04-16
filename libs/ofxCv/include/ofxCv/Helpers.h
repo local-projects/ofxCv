@@ -205,7 +205,7 @@ namespace ofxCv {
 		cv::Mat temp;
 		cv::Mat eroded;
 
-		cv::Mat element = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(3, 3));
+		cv::Mat element = cv::getStructuringElement(cv::MORPH_CROSS, cv::Size(3, 3));
 		bool done;
 		int c = 0;
 		do{
