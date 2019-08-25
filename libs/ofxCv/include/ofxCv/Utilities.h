@@ -10,6 +10,7 @@
 #pragma once
 
 #include "opencv2/opencv.hpp"
+#include "opencv2/imgproc/types_c.h"
 #include "ofRectangle.h"
 #include "ofTexture.h"
 #include "ofPixels.h"
