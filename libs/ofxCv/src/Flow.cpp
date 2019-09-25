@@ -1,5 +1,6 @@
 #include "ofxCv/Flow.h"
 #include "ofGraphics.h"
+#include "ofMesh.h"
 
 namespace ofxCv {
 	
@@ -127,14 +128,21 @@ namespace ofxCv {
 			prevPyramid = pyramid;
 			pyramid.clear();
 #else
-			calcOpticalFlowPyrLK(prev,
-                                 next,
-                                 prevPts,
-                                 nextPts,
-                                 status,
-                                 err,
-                                 cv::Size(windowSize, windowSize),
-                                 maxLevel);
+			try{
+				if(prevPts.size()){
+				calcOpticalFlowPyrLK(prev,
+									 next,
+									 prevPts,
+									 nextPts,
+									 status,
+									 err,
+									 cv::Size(windowSize, windowSize),
+									 maxLevel,
+									 TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 30, 0.01),
+									 OPTFLOW_LK_GET_MIN_EIGENVALS
+									 );
+				}
+			}catch(...){}
 #endif
 			status.resize(nextPts.size(),0);
 		}else{
@@ -176,14 +184,29 @@ namespace ofxCv {
 	
 	std::vector<glm::vec2> FlowPyrLK::getCurrent(){
 		std::vector<glm::vec2> ret;
-        for(std::size_t i = 0; i < nextPts.size(); i++) {
-			if(status[i]){
-                ret.push_back(toOf(nextPts[i]));
+		if(status.size()){
+			for(std::size_t i = 0; i < nextPts.size(); i++) {
+				if(status[i]){
+					ret.push_back(toOf(nextPts[i]));
+				}
 			}
 		}
 		return ret;
 	}
-    
+
+	std::vector<glm::vec2> FlowPyrLK::getPrevious(){
+		std::vector<glm::vec2> ret;
+		if(status.size()){
+			for(std::size_t i = 0; i < prevPts.size(); i++) {
+				if(status[i]){
+					ret.push_back(toOf(prevPts[i]));
+				}
+			}
+		}
+		return ret;
+	}
+
+
 	std::vector<glm::vec2> FlowPyrLK::getMotion(){
 		std::vector<glm::vec2> ret;
 		for(std::size_t i = 0; i < prevPts.size(); i++) {
@@ -197,11 +220,21 @@ namespace ofxCv {
 	void FlowPyrLK::drawFlow(ofRectangle rect) {
 		glm::vec2 offset(rect.x,rect.y);
 		glm::vec2 scale(rect.width/getWidth(),rect.height/getHeight());
+		ofMesh m;
+		m.setMode(OF_PRIMITIVE_LINES);
+
 		for(std::size_t i = 0; i < prevPts.size(); i++) {
 			if(status[i]){
-				ofDrawLine(toOf(prevPts[i])*scale+offset, toOf(nextPts[i])*scale+offset);
+				//ofDrawLine(toOf(prevPts[i])*scale+offset, toOf(nextPts[i])*scale+offset);
+				auto pt1 = toOf(prevPts[i]) * scale + offset;
+				auto pt2 = toOf(nextPts[i]) * scale + offset;
+				m.addVertex(glm::vec3(pt1.x, pt1.y, 0));
+				m.addVertex(glm::vec3(pt2.x, pt2.y, 0));
+				m.addColor(ofColor::red);
+				m.addColor(ofColor(255,0,0,0));
 			}
 		}
+		m.draw();
 	}
     
     void FlowPyrLK::resetFlow(){

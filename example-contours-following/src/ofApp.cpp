@@ -14,7 +14,7 @@ void Glow::setup(const cv::Rect& track) {
 void Glow::update(const cv::Rect& track) {
 	cur = toOf(track).getCenter();
 	smooth.interpolate(cur, .5);
-	all.addVertex(smooth);
+	all.addVertex(ofVec3f(smooth));
 }
 
 void Glow::kill() {
@@ -47,12 +47,13 @@ void ofApp::setup() {
 	ofSetVerticalSync(true);
 	ofBackground(0);
 	
-	movie.load("video.mov");
+	movie.load("shutterstock_4758647.mov");
+	ofSetWindowShape(movie.getWidth(), movie.getHeight());
 	movie.play();
 	
 	contourFinder.setMinAreaRadius(1);
 	contourFinder.setMaxAreaRadius(100);
-	contourFinder.setThreshold(15);
+	contourFinder.setThreshold(50);
 	
 	// wait for half a frame before forgetting something
 	tracker.setPersistence(15);

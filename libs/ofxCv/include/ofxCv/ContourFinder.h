@@ -43,7 +43,7 @@ namespace ofxCv {
 		void findContours(T& img) {
 			findContours(toCv(img));
 		}
-		void findContours(cv::Mat img);
+		void findContours(cv::Mat img, int numErode = 0, int numDilate = 0, bool erodeFirst = true);
 		const std::vector<std::vector<cv::Point> >& getContours() const;
 		const std::vector<ofPolyline>& getPolylines() const;
 		const std::vector<cv::Rect>& getBoundingRects() const;
@@ -73,6 +73,13 @@ namespace ofxCv {
 		
 		void setThreshold(float thresholdValue);
 		void setAutoThreshold(bool autoThreshold);
+
+		//for HSV color tracking modes
+		void setHueThreshold(float thresholdValue) {hueThresholdValue = thresholdValue;}
+		void setSatThreshold(float thresholdValue) {satThresholdValue = thresholdValue;}
+		void setValThreshold(float thresholdValue) {valThresholdValue = thresholdValue;}
+		//for RGB mode, standard threshold is used!
+
 		void setInvert(bool invert);
         void setUseTargetColor(bool useTargetColor);
 		void setTargetColor(ofColor targetColor, TrackingColorMode trackingColorMode = TRACK_COLOR_RGB);
@@ -92,10 +99,16 @@ namespace ofxCv {
 		
 		void draw() const;
 
-	protected:
 		cv::Mat hsvBuffer, thresh;
+
+	protected:
+
 		bool autoThreshold, invert, simplify;
 		float thresholdValue;
+
+		float hueThresholdValue = 20;
+		float satThresholdValue = 20;
+		float valThresholdValue = 20;
 		
 		bool useTargetColor;
 		TrackingColorMode trackingColorMode;

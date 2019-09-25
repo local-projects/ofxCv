@@ -33,7 +33,8 @@ namespace ofxCv {
 		resetMaxArea();
 	}
 	
-	void ContourFinder::findContours(cv::Mat img) {
+	void ContourFinder::findContours(cv::Mat img, int numErode, int numDilate, bool erodeFirst) {
+
 		// threshold the image using a tracked color or just binary grayscale
 		if(useTargetColor) {
 			cv::Scalar offset(thresholdValue, thresholdValue, thresholdValue);
@@ -41,6 +42,7 @@ namespace ofxCv {
 			if(trackingColorMode == TRACK_COLOR_RGB) {
 				inRange(img, base - offset, base + offset, thresh);
 			} else {
+				cv::Scalar offset(hueThresholdValue, satThresholdValue, valThresholdValue);
                 // all the HSV modes are broken incorrect,
                 // because opencv uses hue 0-180 not 0-255
                 // which means that the math doesn't wrap.
@@ -56,10 +58,16 @@ namespace ofxCv {
 				cv::Scalar lowerb = base - offset;
 				cv::Scalar upperb = base + offset;
 				inRange(hsvBuffer, lowerb, upperb, thresh);
+
 			}
 		} else {
             copyGray(img, thresh);
 		}
+
+		if(erodeFirst) if(numErode > 0) ofxCv::erode(thresh, thresh, numErode);
+		if(numDilate > 0) ofxCv::dilate(thresh, thresh, numDilate);
+		if(!erodeFirst) if(numErode > 0) ofxCv::erode(thresh, thresh, numErode);
+
 		if(autoThreshold) {
 			threshold(thresh, thresholdValue, invert);
 		}
