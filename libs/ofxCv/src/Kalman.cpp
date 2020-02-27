@@ -8,8 +8,29 @@ namespace ofxCv {
 	using namespace cv;
 	
 	template <class T>
-	void KalmanPosition_<T>::init(T smoothness, T rapidness, bool bUseAccel) {
-		if( bUseAccel ) {
+	void KalmanPosition_<T>::init(T smoothness, T rapidness, bool bUseAccel, bool bUseJerk) {
+		if (bUseJerk && bUseAccel) {
+			KF.init(12, 3, 0); // 12 variables (position+velocity+accel) and 3 measurements (position)
+
+			KF.transitionMatrix = (Mat_<T>(12, 12) <<
+				  1,   0,   0,   1,   0,   0, 0.5,   0,   0,0.25,   0,   0,
+				  0,   1,   0,   0,   1,   0,   0, 0.5,   0,   0,0.25,   0,
+				  0,   0,   1,   0,   0,   1,   0,   0, 0.5,   0,   0,0.25,
+				  0,   0,   0,   1,   0,   0,   1,   0,   0, 0.5,   0,   0,
+				  0,   0,   0,   0,   1,   0,   0,   1,   0,   0, 0.5,   0,
+				  0,   0,   0,   0,   0,   1,   0,   0,   1,   0,   0, 0.5,
+				  0,   0,   0,   0,   0,   0,   1,   0,   0,   1,   0,   0,
+				  0,   0,   0,   0,   0,   0,   0,   1,   0,   0,   1,   0,
+				  0,   0,   0,   0,   0,   0,   0,   0,   1,   0,   0,   1,
+				  0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   0,   0,
+				  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   0,
+				  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1);
+
+			measurement = Mat_<T>::zeros(3, 1);
+
+			KF.statePre = Mat_<T>::zeros(12, 1);
+		}
+		else if( bUseAccel ) {
 			KF.init(9, 3, 0); // 9 variables (position+velocity+accel) and 3 measurements (position)
 			
 			KF.transitionMatrix = (Mat_<T>(9, 9) <<
@@ -49,6 +70,16 @@ namespace ofxCv {
 	
 	template <class T>
 	void KalmanPosition_<T>::update(const glm::vec3& p) {
+
+		// If this is the first update, then set the initial state to be the current value
+		if (bFirstUpdate) {
+			bFirstUpdate = false;
+
+			KF.statePre.at<T>(0, 0) = KF.statePost.at<T>(0, 0) = p[0];
+			KF.statePre.at<T>(1, 0) = KF.statePost.at<T>(1, 0) = p[1];
+			KF.statePre.at<T>(2, 0) = KF.statePost.at<T>(2, 0) = p[2];
+		}
+
 		// First predict, to update the internal statePre variable
 		prediction = KF.predict();
 		
@@ -80,8 +111,8 @@ namespace ofxCv {
 	template class KalmanPosition_<float>;
 	
 	template <class T>
-	void KalmanEuler_<T>::init(T smoothness, T rapidness, bool bUseAccel) {
-		KalmanPosition_<T>::init(smoothness, rapidness, bUseAccel);
+	void KalmanEuler_<T>::init(T smoothness, T rapidness, bool bUseAccel, bool bUseJerk) {
+		KalmanPosition_<T>::init(smoothness, rapidness, bUseAccel, bUseJerk);
 		eulerPrev.x = 0.f;
 		eulerPrev.y = 0.f;
 		eulerPrev.z = 0.f;
@@ -98,6 +129,15 @@ namespace ofxCv {
 			else if( euler[i] > 90 + rev && eulerPrev[i] < -90 + rev ) euler[i] -= 360;
 		}
 		
+		// If this is the first update, set the initial values
+		if (bFirstUpdate) {
+			bFirstUpdate = false;
+
+			KF.statePre.at<T>(0, 0) = KF.statePost.at<T>(0, 0) = euler[0];
+			KF.statePre.at<T>(1, 0) = KF.statePost.at<T>(1, 0) = euler[1];
+			KF.statePre.at<T>(2, 0) = KF.statePost.at<T>(2, 0) = euler[2];
+		}
+
 		KalmanPosition_<T>::update(euler);
 		eulerPrev = euler;
 	}
