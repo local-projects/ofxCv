@@ -82,7 +82,7 @@ namespace ofxCv {
 
 		// First predict, to update the internal statePre variable
 		prediction = KF.predict();
-		
+
 		// The "correct" phase that is going to use the predicted value and our measurement
 		measurement(0) = p.x;
 		measurement(1) = p.y;
@@ -94,6 +94,15 @@ namespace ofxCv {
 	glm::vec3 KalmanPosition_<T>::getPrediction()
 	{
 		return glm::vec3(prediction(0), prediction(1), prediction(2));
+	}
+
+	template <class T>
+	glm::mat3x3 KalmanPosition_<T>::getPredictionAll()
+	{
+		return glm::mat3x3(
+			prediction(0), prediction(1), prediction(2),
+			prediction(3), prediction(4), prediction(5),
+			prediction(6), prediction(7), prediction(8));
 	}
 	
 	template <class T>

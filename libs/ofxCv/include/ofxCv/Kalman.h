@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ofMain.h"
 #include "ofxCv.h"
 #include "ofVectorMath.h"
 
@@ -18,6 +19,7 @@ namespace ofxCv {
 		void init(T smoothness = 0.1, T rapidness = 0.1, bool bUseAccel = false, bool bUseJerk = false);
 		void update(const glm::vec3&);
 		glm::vec3 getPrediction();
+		glm::mat3x3 getPredictionAll();
 		glm::vec3 getEstimation();
 		glm::vec3 getVelocity();
 		void predict() { prediction = KF.predict(); }; // progress forward one time step
