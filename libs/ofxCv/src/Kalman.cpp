@@ -9,6 +9,9 @@ namespace ofxCv {
 	
 	template <class T>
 	void KalmanPosition_<T>::init(T smoothness, T rapidness, bool bUseAccel, bool bUseJerk) {
+		// Re-initialize the flag for updating
+		bFirstUpdate = true;
+		// Re-init the params
 		if (bUseJerk && bUseAccel) {
 			KF.init(12, 3, 0); // 12 variables (position+velocity+accel) and 3 measurements (position)
 
