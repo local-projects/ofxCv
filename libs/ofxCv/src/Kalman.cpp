@@ -140,14 +140,14 @@ namespace ofxCv {
 			if( euler[i] < -90 + rev && eulerPrev[i] > 90 + rev ) euler[i] += 360;
 			else if( euler[i] > 90 + rev && eulerPrev[i] < -90 + rev ) euler[i] -= 360;
 		}
-		
+        
 		// If this is the first update, set the initial values
-		if (bFirstUpdate) {
-			bFirstUpdate = false;
+		if (KalmanPosition::bFirstUpdate) {
+			KalmanPosition::bFirstUpdate = false;
 
-			KF.statePre.at<T>(0, 0) = KF.statePost.at<T>(0, 0) = euler[0];
-			KF.statePre.at<T>(1, 0) = KF.statePost.at<T>(1, 0) = euler[1];
-			KF.statePre.at<T>(2, 0) = KF.statePost.at<T>(2, 0) = euler[2];
+            KalmanPosition_<T>::KF.statePre.template at<T>(0, 0) = KalmanPosition_<T>::KF.statePost.template at<T>(0, 0) = euler[0];
+            KalmanPosition_<T>::KF.statePre.template at<T>(1, 0) = KalmanPosition_<T>::KF.statePost.template at<T>(1, 0) = euler[1];
+            KalmanPosition_<T>::KF.statePre.template at<T>(2, 0) = KalmanPosition_<T>::KF.statePost.template at<T>(2, 0) = euler[2];
 		}
 
 		KalmanPosition_<T>::update(euler);
